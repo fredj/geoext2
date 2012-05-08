@@ -64,6 +64,15 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
+    /**
+     * @private
+     */
+    destroy: function() {
+        this.unbind();
+        this.callParent();
+    },
+
+
     bind: function(layer, options) {
         if (this.layer) {
             // already bound

@@ -199,6 +199,16 @@
 
         }
 
+        function test_destroy(t) {
+            t.plan(1);
+            var layer =  new OpenLayers.Layer.Vector();
+            var store = Ext.create('GeoExt.data.FeatureStore', {
+                model: 'My.Test.Model',
+                layer: layer
+            });
+            store.destroy();
+            t.eq(store.layer, null, "Destroy calls unbind");
+        }
     </script>
   <body>
     <div id="map"></div>
