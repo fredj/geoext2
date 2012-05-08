@@ -20,7 +20,7 @@
         ]);
 
         function test_constructor(t) {
-            t.plan(5);
+            t.plan(7);
 
             var store, layer;
 
@@ -49,11 +49,17 @@
                 layer: layer
             });
 
-            t.ok(store instanceof GeoExt.data.FeatureStore, "");
-            t.eq(store.layer.id, layer.id, "");
-            t.eq(store.getCount(), 2, "");
-            t.eq(store.getAt(0).get('foo'), 'bar', "");
-            t.eq(store.getAt(0).get('ele'), 12, "");
+            t.ok(store instanceof GeoExt.data.FeatureStore,
+                 "store is a GeoExt.data.FeatureStore instance");
+            t.eq(store.layer.id, layer.id,
+                 "ctor sets the passed layer in the instance");
+
+            t.eq(store.getCount(), 2, "layer.features added to the store");
+
+            t.eq(store.getAt(0).get('foo'), 'bar', "feature[0].foo == 'bar'");
+            t.eq(store.getAt(0).get('ele'), 12, "feature[0].ele == 12");
+            t.eq(store.getAt(1).get('foo'), '42', "feature[1].foo == '42'");
+            t.eq(store.getAt(1).get('ele'), -100, "feature[1].ele == -100");
         }
 
     </script>
