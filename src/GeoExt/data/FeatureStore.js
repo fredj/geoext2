@@ -30,7 +30,12 @@ Ext.define('GeoExt.data.FeatureStore', {
             return;
         }
         this.layer = layer;
-        // ...
+        this.layer.events.on({
+            'featuresadded': this.onFeaturesAdded,
+            'featuresremoved': this.onFeaturesRemoved,
+            'featuresmodified': this.onFeaturesModified,
+            scope: this
+        });
         this.on({
             'load': this.onLoad,
             'clear': this.onClear,
@@ -49,7 +54,12 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     unbind: function() {
         if (this.layer) {
-            // ...
+            this.layer.events.un({
+                'featuresadded': this.onFeaturesAdded,
+                'featuresremoved': this.onFeaturesRemoved,
+                'featuresmodified': this.onFeaturesModified,
+                scope: this
+            });
             this.un({
                 'load': this.onLoad,
                 'clear': this.onClear,
