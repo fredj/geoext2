@@ -2,7 +2,15 @@ Ext.define('GeoExt.data.FeatureStore', {
     extend: 'Ext.data.Store',
 
     statics: {
+        /**
+         * @static
+         * @property {Number} LAYER_TO_STORE
+         */
         LAYER_TO_STORE: 1,
+        /**
+         * @static
+         * @property {Number} STORE_TO_LAYER
+         */
         STORE_TO_LAYER: 2
     },
 
