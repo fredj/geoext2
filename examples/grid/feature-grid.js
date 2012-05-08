@@ -16,6 +16,7 @@ var mapPanel, store, gridPanel, mainPanel;
 
 Ext.require([
     'GeoExt.data.FeatureStore',
+    'GeoExt.selection.FeatureModel',
     'Ext.grid.GridPanel',
     'Ext.layout.container.Border'
 ]);
@@ -140,7 +141,7 @@ Ext.application({
                 width: 100,
                 dataIndex: "elevation"
             }],
-//            sm: Ext.create('GeoExt.grid.FeatureSelectionModel')
+            selType: 'featuremodel'
         });
 
         // create a panel and add the map panel and grid panel
