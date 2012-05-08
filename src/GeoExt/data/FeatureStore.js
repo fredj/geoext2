@@ -123,7 +123,8 @@ Ext.define('GeoExt.data.FeatureStore', {
             }, this);
         }
 
-        if (initDir & GeoExt.data.FeatureStore.LAYER_TO_STORE) {
+        if (initDir & GeoExt.data.FeatureStore.LAYER_TO_STORE &&
+                layer.features.length > 0) {
             // append a snapshot of the layer's features
             this.loadRawData(layer.features.slice(0), true);
         }
