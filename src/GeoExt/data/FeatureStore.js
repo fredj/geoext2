@@ -121,6 +121,13 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
+    /**
+     * Returns the model instance corresponding to a feature.
+     */
+    getByFeature: function(feature) {
+        // FIXME
+    },
+
     onFeaturesAdded: function(evt) {
 
     },
