@@ -13,7 +13,10 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
-    // openlayers.layer.vector or layer record
+    /**
+     * @property {OpenLayers.Layer.Vector} layer
+     * Vector layer that the store is synchronized with, if any.
+     */
     layer: null,
 
     /**
