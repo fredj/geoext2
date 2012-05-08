@@ -63,7 +63,7 @@
         }
 
         function test_constructor_features(t) {
-            t.plan(6);
+            t.plan(5);
 
             store = Ext.create('GeoExt.data.FeatureStore', {
                 model: 'My.Test.Model',
@@ -84,11 +84,85 @@
             t.eq(store.getAt(0).get('ele'), 12, "feature[0].ele == 12");
             t.eq(store.getAt(1).get('foo'), '42', "feature[1].foo == '42'");
             t.eq(store.getAt(1).get('ele'), -100, "feature[1].ele == -100");
-
-            store.removeAll();
-            t.eq(store.getCount(), 0, "store.removeAll removes all records from the store");
-
         }
+
+        function test_store_layer_sync(t) {
+            t.plan(2);
+
+            var layer =  new OpenLayers.Layer.Vector();
+            var store = Ext.create('GeoExt.data.FeatureStore', {
+                model: 'My.Test.Model',
+                layer: layer
+            });
+
+            // loadRawData
+            store.loadRawData([
+                new OpenLayers.Feature.Vector(null, {
+                    foo: 'bar',
+                    ele: 12
+                }),
+                new OpenLayers.Feature.Vector()
+            ]);
+            t.eq(layer.features.length, 2, "loading two records in the store with 'loadRawData' adds two features to the layer");
+            t.eq(store.getCount(), 2, 'loading two records in the store with "loadRawData" does not create duplicate records in store');
+
+            // removeAll
+            store.removeAll();
+            t.eq(store.getCount(), 0, '"removeAll" on store removes all records from the store');
+            t.eq(layer.features.length, 0, '"removeAll" on store removes features from layer');
+
+            // load no data
+            store.loadData([]);
+            t.eq(store.getCount(), 0, '"loadData([]) does not add records to the store');
+            t.eq(layer.features.length, 0, '"loadData([]) does not add features to the layer');
+        }
+
+        function test_bind_unbind(t) {
+            t.plan(0);
+            // FIXME
+        }
+
+        function test_add_remove(t) {
+            t.plan(4);
+
+            var layer =  new OpenLayers.Layer.Vector();
+            var store = Ext.create('GeoExt.data.FeatureStore', {
+                model: 'My.Test.Model',
+                layer: layer
+            });
+
+            var feature = Ext.create('My.Test.Model', {
+                foo: 'Bonn',
+                ele: 64
+            });
+
+            store.add(feature);
+            t.eq(store.getCount(), 1, 'Adding a model instance to the store with add');
+            t.eq(layer.features.length, 1, 'Adding a model instance to store with "add" does create corresponding feature in layer');
+
+            store.remove(feature);
+            t.eq(store.getCount(), 0, 'remove on store with "remove" removes the record from the store');
+            t.eq(layer.features.length, 0, 'remove on store with "remove" removes the corresponding feature from layer');
+        }
+
+        function test_getByFeature(t) {
+            t.plan(2);
+            var layer =  new OpenLayers.Layer.Vector();
+	    var features = [
+                new OpenLayers.Feature.Vector(),
+                new OpenLayers.Feature.Vector()
+            ];
+            features[0].state = OpenLayers.State.INSERT;
+            layer.addFeatures(features);
+
+            var store = Ext.create('GeoExt.data.FeatureStore', {
+                model: 'My.Test.Model',
+                layer: layer
+            });
+
+	    var feature = store.getByFeature(features[0]);
+
+	}
     </script>
   <body>
     <div id="map"></div>
