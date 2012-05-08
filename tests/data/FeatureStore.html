@@ -19,7 +19,15 @@
             'GeoExt.data.FeatureStore'
         ]);
 
-        function test_constructor(t) {
+        Ext.define('My.Test.Model', {
+            extend: 'Ext.data.Model',
+            fields: [
+                {name: 'foo', type: 'string', mapping: 'attributes.foo'},
+                {name: 'ele', type: 'int', mapping: 'attributes.ele'}
+            ]
+        });
+
+        function test_constructor_layer(t) {
             t.plan(7);
 
             var store, layer;
@@ -35,14 +43,6 @@
                     ele: -100
                 })
             ]);
-
-            Ext.define('My.Test.Model', {
-                extend: 'Ext.data.Model',
-                fields: [
-                    {name: 'foo', type: 'string', mapping: 'attributes.foo'},
-                    {name: 'ele', type: 'int', mapping: 'attributes.ele'}
-                ]
-            });
 
             store = Ext.create('GeoExt.data.FeatureStore', {
                 model: 'My.Test.Model',
@@ -62,6 +62,33 @@
             t.eq(store.getAt(1).get('ele'), -100, "feature[1].ele == -100");
         }
 
+        function test_constructor_features(t) {
+            t.plan(6);
+
+            store = Ext.create('GeoExt.data.FeatureStore', {
+                model: 'My.Test.Model',
+                features: [
+                    new OpenLayers.Feature.Vector(null, {
+                        foo: 'bar',
+                        ele: 12
+                    }),
+                    new OpenLayers.Feature.Vector(null, {
+                        foo: '42',
+                        ele: -100
+                    })
+                ]
+            });
+            t.eq(store.getCount(), 2, "features added to the store");
+
+            t.eq(store.getAt(0).get('foo'), 'bar', "feature[0].foo == 'bar'");
+            t.eq(store.getAt(0).get('ele'), 12, "feature[0].ele == 12");
+            t.eq(store.getAt(1).get('foo'), '42', "feature[1].foo == '42'");
+            t.eq(store.getAt(1).get('ele'), -100, "feature[1].ele == -100");
+
+            store.removeAll();
+            t.eq(store.getCount(), 0, "store.removeAll removes all records from the store");
+
+        }
     </script>
   <body>
     <div id="map"></div>
