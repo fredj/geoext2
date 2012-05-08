@@ -3,6 +3,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     requires: [
 
     ],
+
     statics: {
         LAYER_TO_STORE: 1,
         STORE_TO_LAYER: 2
@@ -55,12 +56,25 @@ Ext.define('GeoExt.data.FeatureStore', {
             // already bound
             return;
         }
+        this.layer = layer;
+
         var initDir = options.initDir;
-        if (initDir == undefined) {
+        if (options.initDir == undefined) {
             initDir = GeoExt.data.FeatureStore.LAYER_TO_STORE |
                 GeoExt.data.FeatureStore.STORE_TO_LAYER;
         }
-        this.layer = layer;
+
+        if (initDir & GeoExt.data.FeatureStore.STORE_TO_LAYER) {
+            this.each(function(record) {
+                // FIXME
+            }, this);
+        }
+
+        if (initDir & GeoExt.data.FeatureStore.LAYER_TO_STORE) {
+            // append a snapshot of the layer's features
+            this.loadData(layer.features.slice(0), true);
+        }
+
         this.layer.events.on({
             'featuresadded': this.onFeaturesAdded,
             'featuresremoved': this.onFeaturesRemoved,

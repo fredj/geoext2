@@ -39,15 +39,14 @@
             Ext.define('My.Test.Model', {
                 extend: 'Ext.data.Model',
                 fields: [
-                    {name: 'foo', type: 'string', mapping: 'attributes.foo'},
-                    {name: 'ele', type: 'int', mapping: 'attributes.ele'}
+                    {name: 'foo', type: 'string'},
+                    {name: 'ele', type: 'int'}
                 ]
             });
 
             store = Ext.create('GeoExt.data.FeatureStore', {
                 model: 'My.Test.Model',
-                layer: layer,
-                features: layer.features
+                layer: layer
             });
 
             t.ok(store instanceof GeoExt.data.FeatureStore, "");
