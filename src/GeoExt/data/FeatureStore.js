@@ -163,9 +163,9 @@ Ext.define('GeoExt.data.FeatureStore', {
                 }
             }
             this._adding = true;
-	    // add feature records to the store, when called with
-	    // append true loadRawData triggers an "add" event and then a
-	    // "load" event
+            // add feature records to the store, when called with
+            // append true loadRawData triggers an "add" event and then a
+            // "load" event
             this.loadRawData(toAdd, true);
             delete this._adding;
         }
