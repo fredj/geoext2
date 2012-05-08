@@ -72,7 +72,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
         if (initDir & GeoExt.data.FeatureStore.LAYER_TO_STORE) {
             // append a snapshot of the layer's features
-            this.loadData(layer.features.slice(0), true);
+            this.loadRawData(layer.features.slice(0), true);
         }
 
         this.layer.events.on({

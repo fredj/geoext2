@@ -39,8 +39,8 @@
             Ext.define('My.Test.Model', {
                 extend: 'Ext.data.Model',
                 fields: [
-                    {name: 'foo', type: 'string'},
-                    {name: 'ele', type: 'int'}
+                    {name: 'foo', type: 'string', mapping: 'attributes.foo'},
+                    {name: 'ele', type: 'int', mapping: 'attributes.ele'}
                 ]
             });
 
