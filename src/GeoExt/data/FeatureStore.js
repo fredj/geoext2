@@ -3,10 +3,24 @@ Ext.define('GeoExt.data.FeatureStore', {
     requires: [
 
     ],
-
+    statics: {
+        LAYER_TO_STORE: 1,
+        STORE_TO_LAYER: 2
+    },
     // openlayers.layer.vector or layer record
     layer: null,
 
+    /**
+     * @cfg {Number} initDir
+     *  Bitfields specifying the direction to use for the initial sync between
+     *  the layer and the store, if set to 0 then no initial sync is done.
+     *  Defaults to ``GeoExt.data.FeatureStore.LAYER_TO_STORE|GeoExt.data.FeatureStore.STORE_TO_LAYER``
+     */
+
+    /**
+     * @config {Object} Creation parameters
+     * @private
+     */
     constructor: function(config) {
         config = Ext.apply({}, config);
 
@@ -19,8 +33,12 @@ Ext.define('GeoExt.data.FeatureStore', {
         delete config.features;
 
         this.callParent([config]);
+
+        var options = {initDir: config.initDir};
+        delete config.initDir;
+
         if (layer) {
-            this.bind(layer);
+            this.bind(layer, options);
         }
     },
 
@@ -28,6 +46,11 @@ Ext.define('GeoExt.data.FeatureStore', {
         if (this.layer) {
             // already bound
             return;
+        }
+        var initDir = options.initDir;
+        if (initDir == undefined) {
+            initDir = GeoExt.data.FeatureStore.LAYER_TO_STORE |
+                GeoExt.data.FeatureStore.STORE_TO_LAYER;
         }
         this.layer = layer;
         this.layer.events.on({
@@ -76,23 +99,39 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
-    onLoad: function() {
+    onFeaturesAdded: function(evt) {
 
     },
-    onClear: function() {
+
+    onFeaturesRemoved: function(evt) {
 
     },
-    onAdd: function() {
+
+    onFeaturesModified: function(evt) {
 
     },
-    onRemove: function() {
+
+    onLoad: function(store, records, successful) {
 
     },
-    onUpdate: function() {
+
+    onClear: function(store) {
 
     },
+
+    onAdd: function(store, records, index) {
+
+    },
+
+    onRemove: function(store, record, index) {
+
+    },
+
+    onUpdate: function(store, record, operation) {
+
+    },
+
     onReplace: function() {
 
     }
-
 });
