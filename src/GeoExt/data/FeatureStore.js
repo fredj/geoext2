@@ -152,6 +152,16 @@ Ext.define('GeoExt.data.FeatureStore', {
 	}));
     },
 
+    addFeaturesToLayer: function(records) {
+	var features = [];
+	for (var i = 0, len = records.length; i < len; i++) {
+	    features.push(records[i].raw);
+	}
+	this._adding = true;
+	this.layer.addFeatures(features);
+	delete this._adding;
+    },
+
     onFeaturesAdded: function(evt) {
         if (!this._adding) {
             var features = evt.features, toAdd = features;
@@ -182,7 +192,9 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     onLoad: function(store, records, successful) {
-
+	if (successful) {
+            this.addFeaturesToLayer(records);
+	}
     },
 
     onClear: function(store) {
