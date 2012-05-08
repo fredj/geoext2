@@ -147,7 +147,9 @@ Ext.define('GeoExt.data.FeatureStore', {
      * Returns the model instance corresponding to a feature.
      */
     getByFeature: function(feature) {
-        // FIXME
+	return this.getAt(this.findBy(function(record, id) {
+	    return record.raw == feature;
+	}));
     },
 
     onFeaturesAdded: function(evt) {
