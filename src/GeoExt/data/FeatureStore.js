@@ -1,8 +1,5 @@
 Ext.define('GeoExt.data.FeatureStore', {
     extend: 'Ext.data.Store',
-    requires: [
-
-    ],
 
     statics: {
         LAYER_TO_STORE: 1,
