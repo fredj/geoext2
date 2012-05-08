@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html debug="true">
+  <head>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js" ></script>
+
+    <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+
+    <script type="text/javascript">
+        Ext.Loader.setConfig({
+            disableCaching: false,
+            enabled: true,
+            paths: {
+                GeoExt: '../../src/GeoExt'
+            }
+        });
+
+        Ext.require([
+            'GeoExt.data.FeatureStore'
+        ]);
+
+        function test_constructor(t) {
+            t.plan(2);
+
+            var store, layer;
+
+            layer = new OpenLayers.Layer.Vector();
+            layer.addFeatures([
+                new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(6, 46), {
+                    foo: 'bar',
+                    ele: 12
+                }),
+                new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(9, 46.56), {
+                    foo: '42',
+                    ele: -100
+                })
+            ]);
+
+            Ext.define('My.Test.Model', {
+                extend: 'Ext.data.Model',
+                fields: [
+                    {name: 'foo', type: 'string'},
+                    {name: 'ele', type: 'int'}
+                ]
+            });
+
+            store = Ext.create('GeoExt.data.FeatureStore', {
+                model: 'My.Test.Model',
+                layer: layer
+            });
+
+            t.ok(store instanceof GeoExt.data.FeatureStore, "");
+            t.eq(store.layer.id, layer.id, "");
+        }
+
+    </script>
+  <body>
+    <div id="map"></div>
+  </body>
+</html>
