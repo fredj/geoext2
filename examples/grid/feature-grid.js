@@ -82,8 +82,8 @@ Ext.application({
         store = Ext.create('GeoExt.data.FeatureStore', {
             layer: vecLayer,
             fields: [
-                {name: 'name', type: 'string', mapping: 'attributes.name'},
-                {name: 'elevation', type: 'float', mapping: 'attributes.elevation'}
+                {name: 'name', type: 'string'},
+                {name: 'elevation', type: 'float'}
             ],
             autoLoad: true
         });
