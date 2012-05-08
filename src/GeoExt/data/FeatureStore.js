@@ -3,6 +3,12 @@ Ext.define('GeoExt.data.FeatureStore', {
     requires: [
 
     ],
+    proxy: {
+        type: 'memory',
+        reader: {
+            type: 'json'
+        }
+    },
 
     // openlayers.layer.vector or layer record
     layer: null,
