@@ -26,6 +26,11 @@ Ext.define('GeoExt.data.FeatureStore', {
      *  Defaults to ``GeoExt.data.FeatureStore.LAYER_TO_STORE|GeoExt.data.FeatureStore.STORE_TO_LAYER``
      */
 
+    /** @cfg {OpenLayers.Filter} featureFilter
+     *  This filter is evaluated before a feature record is added to the store.
+     */
+    featureFilter: null,
+
     /**
      * @config {Object} Creation parameters
      * @private
@@ -129,7 +134,24 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     onFeaturesAdded: function(evt) {
-        this.loadRawData(evt.features, true);
+        if (!this._adding) {
+            var features = evt.features, toAdd = features;
+            if (this.featureFilter) {
+                toAdd = [];
+                for (var i = 0, len = features.length; i < len; i++) {
+                    var feature = features[i];
+                    if (this.featureFilter.evaluate(feature) !== false) {
+                        toAdd.push(feature);
+                    }
+                }
+            }
+            this._adding = true;
+	    // add feature records to the store, when called with
+	    // append true loadRawData triggers an "add" event and then a
+	    // "load" event
+            this.loadRawData(toAdd, true);
+            delete this._adding;
+        }
     },
 
     onFeaturesRemoved: function(evt) {

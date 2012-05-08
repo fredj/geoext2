@@ -148,21 +148,57 @@
         function test_getByFeature(t) {
             t.plan(2);
             var layer =  new OpenLayers.Layer.Vector();
-	    var features = [
+            var features = [
                 new OpenLayers.Feature.Vector(),
                 new OpenLayers.Feature.Vector()
             ];
             features[0].state = OpenLayers.State.INSERT;
             layer.addFeatures(features);
-
             var store = Ext.create('GeoExt.data.FeatureStore', {
                 model: 'My.Test.Model',
                 layer: layer
             });
 
-	    var feature = store.getByFeature(features[0]);
+            var feature = store.getByFeature(features[0]);
+            // FIXME
+            var feature = store.getByFeature(features[1]);
+            // FIXME
+        }
 
-	}
+        function test_addFeatures_removeFeatures(t) {
+            t.plan(2);
+            var layer =  new OpenLayers.Layer.Vector();
+            var features = [
+                new OpenLayers.Feature.Vector(),
+                new OpenLayers.Feature.Vector()
+            ];
+            features[0].state = OpenLayers.State.INSERT;
+            var store = Ext.create('GeoExt.data.FeatureStore', {
+                model: 'My.Test.Model',
+                layer: layer
+            });
+
+            // // test layer addFeatures
+            // layer.addFeatures(features);
+            // t.eq(layer.features.length, 2, 'Adding features to layer with "addFeatures" does not create duplicate features on the layer');
+            // t.eq(store.getCount(), 2, 'Adding features to layer with "addFeatures" does create corresponding records in the store');
+
+            // // test layer removeFeatures
+            // layer.removeFeatures(layer.features);
+            // t.eq(store.getCount(), 0, '"removeFeatures" on layer removes records from the store');
+            // t.eq(layer.features.length, 0, '"removeFeatures" on layer removes features from layer');
+
+            // test layer addFeatures with featureFilter
+            store.featureFilter = new OpenLayers.Filter({
+                evaluate: function(feature) { return false; }
+            });
+            layer.addFeatures(features);
+            t.eq(store.getCount(), 0,
+                 'Adding features to layer with "addFeatures" does not insert records in the store if featureFilter evaluates to false');
+
+
+        }
+
     </script>
   <body>
     <div id="map"></div>
