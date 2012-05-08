@@ -20,7 +20,7 @@
         ]);
 
         function test_constructor(t) {
-            t.plan(2);
+            t.plan(5);
 
             var store, layer;
 
@@ -39,18 +39,22 @@
             Ext.define('My.Test.Model', {
                 extend: 'Ext.data.Model',
                 fields: [
-                    {name: 'foo', type: 'string'},
-                    {name: 'ele', type: 'int'}
+                    {name: 'foo', type: 'string', mapping: 'attributes.foo'},
+                    {name: 'ele', type: 'int', mapping: 'attributes.ele'}
                 ]
             });
 
             store = Ext.create('GeoExt.data.FeatureStore', {
                 model: 'My.Test.Model',
-                layer: layer
+                layer: layer,
+                features: layer.features
             });
 
             t.ok(store instanceof GeoExt.data.FeatureStore, "");
             t.eq(store.layer.id, layer.id, "");
+            t.eq(store.getCount(), 2, "");
+            t.eq(store.getAt(0).get('foo'), 'bar', "");
+            t.eq(store.getAt(0).get('ele'), 12, "");
         }
 
     </script>
