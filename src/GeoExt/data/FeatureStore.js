@@ -184,7 +184,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     addFeatures: function(features) {
-        return this.loadRawData(features);
+        return this.loadRawData(features, true);
     },
 
     removeFeatures: function(features) {
