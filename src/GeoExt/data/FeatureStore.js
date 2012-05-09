@@ -346,10 +346,25 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {Ext.data.Model} record
      * @param {Number} operation
      */
-    onUpdate: function(store, record, operation) {
+    onUpdate: function(store, record, operation, modifiedFieldNames) {
         if (!this._updating) {
-            //FIXME
+            var feature = record.raw;
+            if (feature.state !== OpenLayers.State.INSERT) {
+                feature.state = OpenLayers.State.UPDATE;
+            }
+            var cont = this.layer.events.triggerEvent('beforefeaturemodified', {
+                feature: feature
+            });
+            if (cont !== false) {
+                Ext.Array.each(modifiedFieldNames, function(field) {
+                    feature.attributes[field] = record.get(field);
+                });
+                this._updating = true;
+                this.layer.events.triggerEvent('featuremodified', {
+                    feature: feature
+                });
+                delete this._updating;
+            }
         }
-
     }
 });
