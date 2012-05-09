@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
@@ -8,7 +8,7 @@
 
 /**
  * @class GeoExt.data.FeatureStore
- * A store that synchronizes a features array of an OpenLayers.Layer.Vector
+ * A store that synchronizes a features array of an ``OpenLayers.Layer.Vector``.
  */
 Ext.define('GeoExt.data.FeatureStore', {
     extend: 'Ext.data.Store',
@@ -17,12 +17,12 @@ Ext.define('GeoExt.data.FeatureStore', {
     statics: {
         /**
          * @static
-         * @property {Number} LAYER_TO_STORE
+         * @property {Number}
          */
         LAYER_TO_STORE: 1,
         /**
          * @static
-         * @property {Number} STORE_TO_LAYER
+         * @property {Number}
          */
         STORE_TO_LAYER: 2
     },
@@ -63,18 +63,19 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     /**
      * @cfg {Number} initDir
-     *  Bitfields specifying the direction to use for the initial sync between
-     *  the layer and the store, if set to 0 then no initial sync is done.
-     *  Defaults to ``GeoExt.data.FeatureStore.LAYER_TO_STORE|GeoExt.data.FeatureStore.STORE_TO_LAYER``
+     * Bitfields specifying the direction to use for the initial sync between
+     * the layer and the store, if set to 0 then no initial sync is done.
+     * Defaults to ``GeoExt.data.FeatureStore.LAYER_TO_STORE|GeoExt.data.FeatureStore.STORE_TO_LAYER``
      */
 
-    /** @cfg {OpenLayers.Filter} featureFilter
-     *  This filter is evaluated before a feature record is added to the store.
+    /**
+     * @cfg {OpenLayers.Filter} featureFilter
+     * This filter is evaluated before a feature record is added to the store.
      */
     featureFilter: null,
 
     /**
-     * @config {Object} Creation parameters
+     * @param {Object} config Creation parameters
      * @private
      */
     constructor: function(config) {
@@ -157,6 +158,9 @@ Ext.define('GeoExt.data.FeatureStore', {
         this.fireEvent("bind", this, this.layer);
     },
 
+    /**
+     * Unbind this store to his layer instance.
+     */
     unbind: function() {
         if (this.layer) {
             this.layer.events.un({
@@ -178,7 +182,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Returns the model instance corresponding to a feature.
+     * @return The model instance corresponding to a feature.
      */
     getByFeature: function(feature) {
         return this.getAt(this.findBy(function(record, id) {
@@ -186,6 +190,10 @@ Ext.define('GeoExt.data.FeatureStore', {
         }));
     },
 
+    /**
+     * @private
+     * @param {Ext.data.Model[]} records
+     */
     addFeaturesToLayer: function(records) {
         var features = [];
         for (var i = 0, len = records.length; i < len; i++) {

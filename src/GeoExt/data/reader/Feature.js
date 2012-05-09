@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012-2012 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
@@ -6,17 +6,22 @@
  * of the license.
  */
 
+/**
+ * Used to read the attributes of a feature.
+ */
 Ext.define('GeoExt.data.reader.Feature', {
     extend: 'Ext.data.reader.Json',
     alias : 'reader.feature',
 
     /**
      * @private
-     * Returns an accessor expression for the passed Field. Gives support for properties such as the following:
-     * 'someProperty'
-     * 'some.property'
-     * 'some["property"]'
-     * This is used by buildExtractors to create optimized on extractor function which converts raw data into model instances.
+     * This is used by buildExtractors to create optimized on extractor
+     * function which converts raw data into model instances.
+     *
+     * @param {Object} field The field.
+     * @param {String} fieldVarName the variable name.
+     * @param {String} dataName the data variable name.
+     * @return {String} An accessor expression for the passed Field.
      */
     createFieldAccessExpression: function(field, fieldVarName, dataName) {
         return dataName + ".attributes['" + field.name + "']";

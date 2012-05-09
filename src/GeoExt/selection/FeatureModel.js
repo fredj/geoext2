@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
@@ -35,7 +35,7 @@
  *              width: 100,
  *              dataIndex: "elevation"
  *          }],
- *          sm: new GeoExt.grid.FeatureSelectionModel()
+ *          selType: 'featuremodel'
  *     });
  */
 
@@ -45,24 +45,24 @@ Ext.define('GeoExt.selection.FeatureModel', {
     alias: 'selection.featuremodel',
 
     /**
-     * @cfg {Boolean} [autoActivateControl=true]
+     * @cfg {Boolean}
      * If true the select feature control is activated and
-     * deactivated when binding and unbinding. Defaults to true.
+     * deactivated when binding and unbinding.
      */
     autoActivateControl: true,
 
     /**
-     * @cfg {Boolean} [layerFromStore=true]
+     * @cfg {Boolean}
      * If true, and if the constructor is passed neither a
      * layer nor a select feature control, a select feature control is
      * created using the layer found in the grid's store. Set it to
      * false if you want to manually bind the selection model to a
-     * layer. Defaults to true.
+     * layer.
      */
     layerFromStore: true,
 
     /**
-     * @cfg {OpenLayers.Control.SelectFeature} selectControl
+     * @cfg {OpenLayers.Control.SelectFeature}
      * The select feature control instance. If not
      * provided one will be created.  If provided any "layer" config option
      * will be ignored, and its "multiple" option will be used to configure
@@ -80,19 +80,19 @@ Ext.define('GeoExt.selection.FeatureModel', {
      */
 
     /**
-     * @private {Boolean} bound
+     * @private {Boolean}
      * Flag indicating if the selection model is bound.
      */
     bound: false,
 
     /**
-     * @private {OpenLayers.Feature.Vector[]} selectedFeatures
+     * @private {OpenLayers.Feature.Vector[]}
      * An array to store the selected features.
      */
     selectedFeatures: [],
 
     /**
-     * @cfg {Boolean} [autoPanMapOnSelection=false]
+     * @cfg {Boolean}
      * If true the map will recenter on feature selection
      * so that the selected features are visible.
      */
@@ -143,10 +143,10 @@ Ext.define('GeoExt.selection.FeatureModel', {
 
     /**
      * @private
+     * Create the select feature control.
+     *
      * @param {OpenLayers.Layer.Vector} layer The vector layer.
      * @param {Object} config The select feature control config.
-     *
-     * Create the select feature control.
      */
     createSelectControl: function(layer, config) {
         config = config || {};
@@ -164,6 +164,8 @@ Ext.define('GeoExt.selection.FeatureModel', {
     },
 
     /**
+     * Bind the selection model to a layer or a SelectFeature control.
+     *
      * @param {OpenLayers.Layer.Vector/OpenLayers.Control.SelectFeature} obj
      * The object this selection model should be bound to,
      * either a vector layer or a select feature control.
@@ -172,8 +174,6 @@ Ext.define('GeoExt.selection.FeatureModel', {
      * ``OpenLayers.Control.SelectFeature`` constructor.
      * @return {OpenLayers.Control.SelectFeatur}
      * The select feature control this selection model uses.
-     *
-     * Bind the selection model to a layer or a SelectFeature control.
      */
     bind: function(obj, options) {
         if (!this.bound) {
@@ -203,10 +203,10 @@ Ext.define('GeoExt.selection.FeatureModel', {
     },
 
     /**
+     * Unbind the selection model from the layer or SelectFeature control.
+     *
      * @return {OpenLayers.Control.SelectFeature}
      * The select feature control this selection model used.
-     *
-     * Unbind the selection model from the layer or SelectFeature control.
      */
     unbind: function() {
         var selectControl = this.selectControl;
@@ -338,10 +338,10 @@ Ext.define('GeoExt.selection.FeatureModel', {
     },
 
     /**
+     * Calculates the max extent which includes all selected features.
+     *
      * @return {OpenLayers.Bounds}
      * Return null if the layer has no features with geometries.
-     *
-     * Calculates the max extent which includes all selected features.
      */
     getSelectionExtent: function () {
         var maxExtent = null;
