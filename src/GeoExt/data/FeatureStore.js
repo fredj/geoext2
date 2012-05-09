@@ -142,10 +142,6 @@ Ext.define('GeoExt.data.FeatureStore', {
             'update': this.onUpdate,
             scope: this
         });
-        this.data.on({
-            'replace': this.onReplace,
-            scope: this
-        });
 
         this.fireEvent("bind", this, this.layer);
     },
@@ -166,10 +162,6 @@ Ext.define('GeoExt.data.FeatureStore', {
                 'update': this.onUpdate,
                 scope: this
             });
-            this.data.un({
-                'replace': this.onReplace,
-                scope: this
-            });
             this.layer = null;
         }
     },
@@ -178,19 +170,19 @@ Ext.define('GeoExt.data.FeatureStore', {
      * Returns the model instance corresponding to a feature.
      */
     getByFeature: function(feature) {
-	return this.getAt(this.findBy(function(record, id) {
-	    return record.raw == feature;
-	}));
+        return this.getAt(this.findBy(function(record, id) {
+            return record.raw == feature;
+        }));
     },
 
     addFeaturesToLayer: function(records) {
-	var features = [];
-	for (var i = 0, len = records.length; i < len; i++) {
-	    features.push(records[i].raw);
-	}
-	this._adding = true;
-	this.layer.addFeatures(features);
-	delete this._adding;
+        var features = [];
+        for (var i = 0, len = records.length; i < len; i++) {
+            features.push(records[i].raw);
+        }
+        this._adding = true;
+        this.layer.addFeatures(features);
+        delete this._adding;
     },
 
     /**
@@ -199,7 +191,7 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {Object} evt
      */
     onFeaturesAdded: function(evt) {
-        if (!this._adding) {
+         if (!this._adding) {
             var features = evt.features, toAdd = features;
             if (this.featureFilter) {
                 toAdd = [];
@@ -225,7 +217,17 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {Object} evt
      */
     onFeaturesRemoved: function(evt) {
-
+        if (!this._removing) {
+            var features = evt.features;
+            for (var i = features.length - 1; i >= 0; i--) {
+                var record = this.getByFeature(features[i]);
+                if (record) {
+                    this._removing = true;
+                    this.remove(record);
+                    delete this._removing;
+                }
+            }
+        }
     },
 
     /**
@@ -237,29 +239,74 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     },
 
+    /**
+     * Handler for a store's load event
+     * @private
+     * @param {Ext.data.Store} store
+     * @param {Ext.data.Model[]} records
+     * @param {Boolean} successful
+     */
     onLoad: function(store, records, successful) {
-	if (successful) {
+        if (successful) {
             this.addFeaturesToLayer(records);
-	}
+        }
     },
 
+    /**
+     * Handler for a store's clear event
+     * @private
+     * @param {Ext.data.Store} store
+     */
     onClear: function(store) {
-
+        this._removing = true;
+        this.layer.removeFeatures(this.layer.features);
+        delete this._removing;
     },
 
+    /**
+     * Handler for a store's add event
+     * @private
+     * @param {Ext.data.Store} store
+     * @param {Ext.data.Model[]} records
+     * @param {Number} index
+     */
     onAdd: function(store, records, index) {
-
+        if (!this._adding) {
+            // addFeaturesToLayer takes care of setting
+            // this._adding to true and deleting it
+            this.addFeaturesToLayer(records);
+        }
     },
 
+    /**
+     * Handler for a store's remove event
+     * @private
+     * @param {Ext.data.Store} store
+     * @param {Ext.data.Model} record
+     * @param {Number} index
+     */
     onRemove: function(store, record, index) {
-
+        if (!this._removing) {
+            var feature = record.getFeature(); // record.raw instead ?
+            if (this.layer.getFeatureById(feature.id) != null) {
+                this._removing = true;
+                this.layer.removeFeatures([feature]);
+                delete this._removing;
+            }
+        }
     },
 
+    /**
+     * Handler for a store's update event
+     * @private
+     * @param {Ext.data.Store} store
+     * @param {Ext.data.Model} record
+     * @param {Number} operation
+     */
     onUpdate: function(store, record, operation) {
-
-    },
-
-    onReplace: function() {
+        if (!this._updating) {
+            //FIXME
+        }
 
     }
 });

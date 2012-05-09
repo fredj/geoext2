@@ -160,9 +160,10 @@
             });
 
             var feature = store.getByFeature(features[0]);
-            // FIXME
+	    t.ok(feature);
+
             var feature = store.getByFeature(features[1]);
-            // FIXME
+	    t.ok(feature);
         }
 
         function test_addFeatures_removeFeatures(t) {
@@ -178,15 +179,15 @@
                 layer: layer
             });
 
-            // // test layer addFeatures
-            // layer.addFeatures(features);
-            // t.eq(layer.features.length, 2, 'Adding features to layer with "addFeatures" does not create duplicate features on the layer');
-            // t.eq(store.getCount(), 2, 'Adding features to layer with "addFeatures" does create corresponding records in the store');
+            // test layer addFeatures
+            layer.addFeatures(features);
+            t.eq(layer.features.length, 2, 'Adding features to layer with "addFeatures" does not create duplicate features on the layer');
+            t.eq(store.getCount(), 2, 'Adding features to layer with "addFeatures" does create corresponding records in the store');
 
-            // // test layer removeFeatures
-            // layer.removeFeatures(layer.features);
-            // t.eq(store.getCount(), 0, '"removeFeatures" on layer removes records from the store');
-            // t.eq(layer.features.length, 0, '"removeFeatures" on layer removes features from layer');
+            // test layer removeFeatures
+            layer.removeFeatures(layer.features);
+            t.eq(store.getCount(), 0, '"removeFeatures" on layer removes records from the store');
+            t.eq(layer.features.length, 0, '"removeFeatures" on layer removes features from layer');
 
             // test layer addFeatures with featureFilter
             store.featureFilter = new OpenLayers.Filter({
@@ -195,8 +196,10 @@
             layer.addFeatures(features);
             t.eq(store.getCount(), 0,
                  'Adding features to layer with "addFeatures" does not insert records in the store if featureFilter evaluates to false');
+        }
 
-
+        function test_featuremodified_update(t) {
+            // FIXME
         }
 
         function test_destroy(t) {
