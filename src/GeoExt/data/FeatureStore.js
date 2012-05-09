@@ -12,6 +12,7 @@
  */
 Ext.define('GeoExt.data.FeatureStore', {
     extend: 'Ext.data.Store',
+    requires: ['GeoExt.data.reader.Feature'],
 
     statics: {
         /**
@@ -37,9 +38,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     proxy: {
         type: 'memory',
         reader: {
-            type: 'json',
-            idProperty: 'fid',
-            record: 'attributes'
+            type: 'feature',
+            idProperty: 'fid'
         }
     },
 
