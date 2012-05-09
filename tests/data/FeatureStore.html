@@ -27,6 +27,14 @@
             ]
         });
 
+        Ext.define('My.FooBar.Model', {
+            extend: 'Ext.data.Model',
+            fields: [
+                {name: 'foo', type: 'string'},
+                {name: 'bar'}
+            ]
+        });
+
         function test_constructor_layer(t) {
             t.plan(9);
 
@@ -128,16 +136,16 @@
             var layer = new OpenLayers.Layer.Vector("Foo layer");
             var store = Ext.create('GeoExt.data.FeatureStore', {
 		fields: []
-            });
+	    });
 
             var features = [
-		new OpenLayers.Feature.Vector("Foo feature", {}),
-                new OpenLayers.Feature.Vector("Bar feature", {})
-	    ];
-	    var records = [
-		new OpenLayers.Feature.Vector("Foo record", {}),
-                new OpenLayers.Feature.Vector("Bar record", {})
-	    ];
+                new OpenLayers.Feature.Vector("Foo feature"),
+                new OpenLayers.Feature.Vector("Bar feature")
+            ];
+            var records = [
+                new OpenLayers.Feature.Vector("Foo record"),
+                new OpenLayers.Feature.Vector("Bar record")
+            ];
 
             var reinit_test_data = function () {
                 // unbind store
@@ -266,7 +274,121 @@
         }
 
         function test_featuremodified_update(t) {
-            // FIXME
+            t.plan(15);
+
+            /*
+             * Set up
+             */
+            var feature = new OpenLayers.Feature.Vector(null, {
+                foo: "foo",
+                bar: "bar"
+            });
+            // confirm that we can update phantom records
+            feature.state = OpenLayers.State.INSERT;
+
+            var id = feature.id;
+
+            function keys(obj) {
+                var list = [];
+                for(var k in obj) {
+                    list.push(k);
+                }
+                return list;
+            }
+            var originalAttrs = keys(feature.attributes);
+
+            var layer = new OpenLayers.Layer.Vector("vector");
+
+	    var store = Ext.create('GeoExt.data.FeatureStore', {
+		model: 'My.FooBar.Model',
+                layer: layer
+            });
+	    store.addFeatures(feature);
+            var record = store.getByFeature(feature);
+
+            t.eq(record.get("foo"), "foo",
+                 "record gets correct initial value for property \"foo\"");
+
+            t.eq(record.get("bar"), "bar",
+                 "record gets correct initial value for property \"bar\"");
+
+            /*
+             * Test
+             */
+
+            // featuremodified
+            feature.attributes.foo = "foo2";
+            feature.attributes.bar = "bar2";
+            layer.events.triggerEvent("featuremodified", {feature: feature});
+
+            t.eq(record.get("foo"), "foo2",
+                 "featuremodified event causes update of record property \"foo\"");
+
+            t.eq(record.get("bar"), "bar2",
+                 "featuremodified event causes update of record property \"bar\"");
+
+            // update
+            record.set("foo", "foo3");
+            record.set("bar", "bar3");
+
+            t.eq(feature.attributes.foo, "foo3",
+                 "update event causes update of feature property \"foo\"");
+
+            t.eq(feature.attributes.bar, "bar3",
+                 "update event causes update of feature property \"bar\"");
+
+            // make sure calling record.set didn't add any attributes
+            var currentAttrs = keys(feature.attributes);
+            t.eq(originalAttrs.length, currentAttrs.length,
+                 "no new attributes added: " + currentAttrs.join(", "));
+
+            var feature2 = new OpenLayers.Feature.Vector(null, {
+                "foo": "foo_f2"
+            });
+            layer.addFeatures([feature2]);
+            //store.getById(feature2.id).set("bar", "bar_f2");
+
+            t.eq(feature2.attributes.bar, "bar_f2", "previously undefined attribute set correctly");
+
+
+            // update with falsey vlues
+            feature.attributes.foo = false;
+            feature.attributes.bar = 0;
+            layer.events.triggerEvent("featuremodified", {feature: feature});
+
+            t.eq(record.get("foo"), false, "false correctly set");
+            t.eq(record.get("bar"), 0, "0 correctly set");
+
+
+            // confirm that updates work from the record
+            delete feature.state;
+            record.set("foo", "set from record");
+            t.eq(feature.attributes.foo, "set from record");
+            t.eq(feature.state, OpenLayers.State.UPDATE, "state properly set");
+
+            // confirm that newly inserted features don't get update state
+            feature.state = OpenLayers.State.INSERT;
+            record.set("foo", "still insert");
+            t.eq(feature.attributes.foo, "still insert", "attribute set");
+            t.eq(feature.state, OpenLayers.State.INSERT, "insert state remains");
+
+            // confirm that update doesn't cause errors for features that were
+            // filtered out
+            var filteredFeature = new OpenLayers.Feature.Vector();
+            filteredFeature.state = OpenLayers.State.INSERT;
+            store.featureFilter = new OpenLayers.Filter({
+                evaluate: function(feature) {
+                    return feature !== filteredFeature;
+                }
+            });
+            layer.addFeatures([filteredFeature]);
+            var ok = true;
+            try {
+                layer.events.triggerEvent("featuremodified", {feature: filteredFeature});
+            } catch(e) {
+                ok = false;
+            }
+            t.ok(ok, "modifying filtered out features does not cause errors");
         }
 
         function test_destroy(t) {

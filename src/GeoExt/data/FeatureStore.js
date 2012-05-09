@@ -35,14 +35,6 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {OpenLayers.Layer.Vector} layer
      */
 
-    proxy: {
-        type: 'memory',
-        reader: {
-            type: 'feature',
-            idProperty: 'fid'
-        }
-    },
-
     /**
      * @cfg {OpenLayers.Layer.Vector} layer
      * Layer that this store will be in sync with. If not provided, the
@@ -79,7 +71,15 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @private
      */
     constructor: function(config) {
-        config = Ext.apply({}, config);
+        config = Ext.apply({
+            proxy: {
+                type: 'memory',
+                reader: {
+                    type: 'feature',
+                    idProperty: 'fid'
+                }
+            }
+        }, config);
 
         var layer = config.layer;
         delete config.layer;
