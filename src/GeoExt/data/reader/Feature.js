@@ -12,12 +12,13 @@ Ext.define('GeoExt.data.reader.Feature', {
 
     /**
      * @private
-     * Given an object representing a single model instance's data, iterates over the model's fields and
-     * builds an object with the value for each field.
-     * @param {Object} feature The Feature to convert
-     * @return {Object} Data object suitable for use with a model constructor
+     * Returns an accessor expression for the passed Field. Gives support for properties such as the following:
+     * 'someProperty'
+     * 'some.property'
+     * 'some["property"]'
+     * This is used by buildExtractors to create optimized on extractor function which converts raw data into model instances.
      */
-    extractValues: function(feature) {
-        this.callParent([feature.attributes])
+    createFieldAccessExpression: function(field, fieldVarName, dataName) {
+        return dataName + ".attributes['" + field.name + "']";
     }
 });
