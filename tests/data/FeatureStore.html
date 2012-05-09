@@ -135,8 +135,8 @@
 
             var layer = new OpenLayers.Layer.Vector("Foo layer");
             var store = Ext.create('GeoExt.data.FeatureStore', {
-		fields: []
-	    });
+                fields: []
+            });
 
             var features = [
                 new OpenLayers.Feature.Vector("Foo feature"),
@@ -299,11 +299,11 @@
 
             var layer = new OpenLayers.Layer.Vector("vector");
 
-	    var store = Ext.create('GeoExt.data.FeatureStore', {
-		model: 'My.FooBar.Model',
+            var store = Ext.create('GeoExt.data.FeatureStore', {
+                model: 'My.FooBar.Model',
                 layer: layer
             });
-	    store.addFeatures(feature);
+            store.addFeatures(feature);
             var record = store.getByFeature(feature);
 
             t.eq(record.get("foo"), "foo",

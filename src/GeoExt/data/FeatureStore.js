@@ -145,7 +145,7 @@ Ext.define('GeoExt.data.FeatureStore', {
         this.layer.events.on({
             'featuresadded': this.onFeaturesAdded,
             'featuresremoved': this.onFeaturesRemoved,
-            'featuresmodified': this.onFeaturesModified,
+            'featuremodified': this.onFeatureModified,
             scope: this
         });
         this.on({
@@ -168,7 +168,7 @@ Ext.define('GeoExt.data.FeatureStore', {
             this.layer.events.un({
                 'featuresadded': this.onFeaturesAdded,
                 'featuresremoved': this.onFeaturesRemoved,
-                'featuresmodified': this.onFeaturesModified,
+                'featuremodified': this.onFeatureModified,
                 scope: this
             });
             this.un({
@@ -269,12 +269,16 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for layer featuresmodified event
+     * Handler for layer featuremodified event
      * @private
      * @param {Object} evt
      */
-    onFeaturesModified: function(evt) {
-
+    onFeatureModified: function(evt) {
+        var record_new = this.proxy.reader.read(evt.feature).records[0];
+        var record_old = this.getByFeature(evt.feature);
+        Ext.Object.each(record_new.getData(), function(key, value) {
+            record_old.set(key, value);
+        }, this);
     },
 
     /**
