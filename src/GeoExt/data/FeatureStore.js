@@ -119,7 +119,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
         if (initDir & GeoExt.data.FeatureStore.STORE_TO_LAYER) {
             this.each(function(record) {
-                // FIXME
+                this.layer.addFeatures([record.raw]);
             }, this);
         }
 
