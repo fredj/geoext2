@@ -136,16 +136,16 @@
                 layer: layer
             });
 
-            var feature = Ext.create('My.Test.Model', {
+            var feature = new OpenLayers.Feature.Vector(null, {
                 foo: 'Bonn',
                 ele: 64
             });
 
-            store.add(feature);
+            store.addFeatures(feature);
             t.eq(store.getCount(), 1, 'Adding a model instance to the store with add');
             t.eq(layer.features.length, 1, 'Adding a model instance to store with "add" does create corresponding feature in layer');
 
-            store.remove(feature);
+            store.removeFeatures(feature);
             t.eq(store.getCount(), 0, 'remove on store with "remove" removes the record from the store');
             t.eq(layer.features.length, 0, 'remove on store with "remove" removes the corresponding feature from layer');
         }

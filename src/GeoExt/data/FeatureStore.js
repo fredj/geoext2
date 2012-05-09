@@ -181,6 +181,23 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
+    addFeatures: function() {
+        return this.loadRawData(arguments);
+    },
+
+    removeFeatures: function(features) {
+        //accept both a single-argument array of records, or any number of record arguments
+        if (!Ext.isArray(features)) {
+            features = Array.prototype.slice.apply(arguments);
+        } else {
+            // Create an array copy
+            features = features.slice(0);
+        }
+        Ext.Array.each(features, function(feature) {
+            this.remove(this.getByFeature(feature));
+        }, this);
+    },
+
     /**
      * @return The model instance corresponding to a feature.
      */
@@ -267,6 +284,11 @@ Ext.define('GeoExt.data.FeatureStore', {
      */
     onLoad: function(store, records, successful) {
         if (successful) {
+            // FIXME
+            this._removing = true;
+            this.layer.removeAllFeatures();
+            delete this._removing;
+
             this.addFeaturesToLayer(records);
         }
     },
@@ -306,7 +328,7 @@ Ext.define('GeoExt.data.FeatureStore', {
      */
     onRemove: function(store, record, index) {
         if (!this._removing) {
-            var feature = record.getFeature(); // record.raw instead ?
+            var feature = record.raw;
             if (this.layer.getFeatureById(feature.id) != null) {
                 this._removing = true;
                 this.layer.removeFeatures([feature]);
