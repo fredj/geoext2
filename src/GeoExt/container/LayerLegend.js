@@ -1,4 +1,12 @@
 /**
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/**
  * @class GeoExt.container.LayerLegend
  */
 Ext.define('GeoExt.container.LayerLegend', {
@@ -71,31 +79,29 @@ Ext.define('GeoExt.container.LayerLegend', {
         types: []
     },
 
-    config: {
-        /** @cfg {GeoExt.data.LayerRecord}
-         * The layer record for the legend
-         */
-        layerRecord: null,
+    /** @cfg {GeoExt.data.LayerRecord}
+     * The layer record for the legend
+     */
+    layerRecord: null,
 
-        /** @cfg {Boolean}
-         * Whether or not to show the title of a layer. This can be overridden
-         * on the LayerStore record using the hideTitle property.
-         */
-        showTitle: true,
+    /** @cfg {Boolean}
+     * Whether or not to show the title of a layer. This can be overridden
+     * on the LayerStore record using the hideTitle property.
+     */
+    showTitle: true,
 
-        /** @cfg {String}
-         * Optional title to be displayed instead of the layer title.  If this is
-         * set, the value of ``showTitle`` will be ignored (assumed to be true).
-         */
-        legendTitle: null,
+    /** @cfg {String}
+     * Optional title to be displayed instead of the layer title.  If this is
+     * set, the value of ``showTitle`` will be ignored (assumed to be true).
+     */
+    legendTitle: null,
 
-        /** @cfg {String}
-         * Optional css class to use for the layer title labels.
-         */
-        labelCls: null
-    },
+    /** @cfg {String}
+     * Optional css class to use for the layer title labels.
+     */
+    labelCls: null,
 
-    /** @cfg layerStore {GeoExt.data.LayerStore}
+    /** @property layerStore {GeoExt.data.LayerStore}
      * @private
      */
     layerStore: null,
