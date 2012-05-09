@@ -1,3 +1,7 @@
+/**
+ * @class GeoExt.data.FeatureStore
+ * A store that synchronizes a features array of an OpenLayers.Layer.Vector
+ */
 Ext.define('GeoExt.data.FeatureStore', {
     extend: 'Ext.data.Store',
 
@@ -14,6 +18,14 @@ Ext.define('GeoExt.data.FeatureStore', {
         STORE_TO_LAYER: 2
     },
 
+    /**
+     * @event bind
+     * Fires when the store is bound to a layer.
+     *
+     * @param {GeoExt.data.FeatureStore} store
+     * @param {OpenLayers.Layer.Vector} layer
+     */
+
     proxy: {
         type: 'memory',
         reader: {
@@ -22,10 +34,22 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
+     * @cfg {OpenLayers.Layer.Vector} layer
+     * Layer that this store will be in sync with. If not provided, the
+     * store will not be bound to a layer.
+     */
+
+    /**
      * @property {OpenLayers.Layer.Vector} layer
      * Vector layer that the store is synchronized with, if any.
      */
     layer: null,
+
+    /**
+     * @cfg {OpenLayers.Layer/Array} features
+     * Features that will be added to the store (and the layer, depending on the
+     * value of the ``initDir`` option.
+     */
 
     /**
      * @cfg {Number} initDir
@@ -49,6 +73,7 @@ Ext.define('GeoExt.data.FeatureStore', {
         var layer = config.layer;
         delete config.layer;
 
+        // features option. Alias to data option
         if (config.features) {
             config.data = config.features;
         }
@@ -72,7 +97,13 @@ Ext.define('GeoExt.data.FeatureStore', {
         this.callParent();
     },
 
-
+    /**
+     * Bind this store to a layer instance, once bound the store
+     * is synchronized with the layer and vice-versa.
+     *
+     * @param {OpenLayers.Layer.Vector} layer The layer instance.
+     * @param {Object} options
+     */
     bind: function(layer, options) {
         if (this.layer) {
             // already bound
@@ -162,6 +193,11 @@ Ext.define('GeoExt.data.FeatureStore', {
 	delete this._adding;
     },
 
+    /**
+     * Handler for layer featuresadded event
+     * @private
+     * @param {Object} evt
+     */
     onFeaturesAdded: function(evt) {
         if (!this._adding) {
             var features = evt.features, toAdd = features;
@@ -183,10 +219,20 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
+    /**
+     * Handler for layer featuresremoved event
+     * @private
+     * @param {Object} evt
+     */
     onFeaturesRemoved: function(evt) {
 
     },
 
+    /**
+     * Handler for layer featuresmodified event
+     * @private
+     * @param {Object} evt
+     */
     onFeaturesModified: function(evt) {
 
     },
