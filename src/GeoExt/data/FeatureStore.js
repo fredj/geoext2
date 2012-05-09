@@ -128,6 +128,8 @@ Ext.define('GeoExt.data.FeatureStore', {
                 GeoExt.data.FeatureStore.STORE_TO_LAYER;
         }
 
+        var features = layer.features.slice(0);
+
         if (initDir & GeoExt.data.FeatureStore.STORE_TO_LAYER) {
             this.each(function(record) {
                 layer.addFeatures([record.raw]);
@@ -137,7 +139,7 @@ Ext.define('GeoExt.data.FeatureStore', {
         if (initDir & GeoExt.data.FeatureStore.LAYER_TO_STORE &&
                 layer.features.length > 0) {
             // append a snapshot of the layer's features
-            this.loadRawData(layer.features.slice(0), true);
+            this.loadRawData(features, true);
         }
 
         this.layer.events.on({
@@ -181,8 +183,8 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
-    addFeatures: function() {
-        return this.loadRawData(arguments);
+    addFeatures: function(features) {
+        return this.loadRawData(features);
     },
 
     removeFeatures: function(features) {

@@ -123,8 +123,69 @@
         }
 
         function test_bind_unbind(t) {
-            t.plan(0);
-            // FIXME
+            t.plan(28);
+
+            var layer = new OpenLayers.Layer.Vector("Foo layer");
+            var store = Ext.create('GeoExt.data.FeatureStore', {
+		fields: []
+            });
+
+            var features = [
+		new OpenLayers.Feature.Vector("Foo feature", {}),
+                new OpenLayers.Feature.Vector("Bar feature", {})
+	    ];
+	    var records = [
+		new OpenLayers.Feature.Vector("Foo record", {}),
+                new OpenLayers.Feature.Vector("Bar record", {})
+	    ];
+
+            var reinit_test_data = function () {
+                // unbind store
+                store.unbind();
+
+                // remove all existing records and features
+                store.removeAll();
+                layer.removeAllFeatures();
+                t.eq(layer.features.length, 0, "there is no more features in the layer");
+                t.eq(store.getCount(), 0, "there is no more records in the store");
+
+                // add testing data to store and layer
+                store.addFeatures(records);
+                layer.addFeatures(features);
+                t.eq(layer.features.length, 2, "initial features are loaded in the layer");
+                t.eq(store.getCount(), 2, "initial records are loaded in the store");
+            };
+
+            // test store to layer synchronization
+            reinit_test_data();
+            store.bind(layer, {initDir: GeoExt.data.FeatureStore.STORE_TO_LAYER});
+            t.eq(layer.features.length, 4, "initial records are synchronized to layer");
+            t.eq(store.getCount(), 2, "initial features are not synchronized to store");
+            layer.removeFeatures([features[0]]);
+            t.eq(layer.features.length, 3, "removing feature not present in store has been well removed");
+            t.eq(store.getCount(), 2, "nothing to remove in store when removing feature not present in store");
+
+            // test layer to store synchronization
+            reinit_test_data();
+            store.bind(layer, {initDir: GeoExt.data.FeatureStore.LAYER_TO_STORE});
+            t.eq(layer.features.length, 2, "initial records are not synchronized to layer");
+            t.eq(store.getCount(), 4, "initial features are synchronized to store");
+            store.removeFeatures(records[0]);
+            t.eq(store.getCount(), 3, "removing record not present in layer has been well removed");
+            t.eq(layer.features.length, 2, "nothing to remove in layer when removing record not present in layer");
+
+            // test both synchronization
+            reinit_test_data();
+            store.bind(layer, {initDir: GeoExt.data.FeatureStore.LAYER_TO_STORE |
+                                      GeoExt.data.FeatureStore.STORE_TO_LAYER});
+            t.eq(layer.features.length, 4, "initial records are synchronized to layer");
+            t.eq(store.getCount(), 4, "initial features are synchronized to store XX");
+
+            // test no synchronization
+            reinit_test_data();
+            store.bind(layer, {initDir: 0});
+            t.eq(layer.features.length, 2, "initial records are not synchronized to layer");
+            t.eq(store.getCount(), 2, "initial features are not synchronized to store");
         }
 
         function test_add_remove(t) {
