@@ -209,6 +209,12 @@ Ext.define('GeoExt.data.FeatureStore', {
         }));
     },
 
+    getById: function(id) {
+        return (this.snapshot || this.data).findBy(function(record) {
+            return record.raw.id === id;
+        });
+    },
+
     /**
      * @private
      * @param {Ext.data.Model[]} records

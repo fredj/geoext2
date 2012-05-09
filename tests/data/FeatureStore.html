@@ -343,13 +343,12 @@
                  "no new attributes added: " + currentAttrs.join(", "));
 
             var feature2 = new OpenLayers.Feature.Vector(null, {
-                "foo": "foo_f2"
+                foo: "foo_f2"
             });
             layer.addFeatures([feature2]);
-            //store.getById(feature2.id).set("bar", "bar_f2");
+            store.getById(feature2.id).set("bar", "bar_f2");
 
             t.eq(feature2.attributes.bar, "bar_f2", "previously undefined attribute set correctly");
-
 
             // update with falsey vlues
             feature.attributes.foo = false;
