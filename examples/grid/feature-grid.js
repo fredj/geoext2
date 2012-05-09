@@ -16,6 +16,7 @@ var mapPanel, store, gridPanel, mainPanel;
 
 Ext.require([
     'GeoExt.data.FeatureStore',
+    'GeoExt.selection.FeatureModel',
     'Ext.grid.GridPanel',
     'Ext.layout.container.Border'
 ]);
@@ -81,8 +82,7 @@ Ext.application({
             layer: vecLayer,
             fields: [
                 {name: 'name', type: 'string', mapping: 'attributes.name'},
-                {name: 'elevation', type: 'float', mapping: 'attributes.elevation'},
-                {name: 'fid', mapping: 'fid'}
+                {name: 'elevation', type: 'float', mapping: 'attributes.elevation'}
             ],
             autoLoad: true
         });
@@ -105,8 +105,8 @@ Ext.application({
         }
 
         function renderFeature(value, p, r) {
-            var id = Ext.id(),
-                feature = vecLayer.getFeatureByFid(r.get('fid'));
+            var id = Ext.id();
+            var feature = r.raw;
 
             Ext.defer(function() {
                 var symbolizer = r.store.layer.styleMap.createSymbolizer(feature, 'default');
@@ -141,7 +141,7 @@ Ext.application({
                 width: 100,
                 dataIndex: "elevation"
             }],
-//            sm: Ext.create('GeoExt.grid.FeatureSelectionModel')
+            selType: 'featuremodel'
         });
 
         // create a panel and add the map panel and grid panel
