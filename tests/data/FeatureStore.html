@@ -28,7 +28,7 @@
         });
 
         function test_constructor_layer(t) {
-            t.plan(7);
+            t.plan(9);
 
             var store, layer;
 
@@ -60,6 +60,11 @@
             t.eq(store.getAt(0).get('ele'), 12, "feature[0].ele == 12");
             t.eq(store.getAt(1).get('foo'), '42', "feature[1].foo == '42'");
             t.eq(store.getAt(1).get('ele'), -100, "feature[1].ele == -100");
+
+            t.ok(store.getAt(0).raw instanceof OpenLayers.Feature.Vector,
+                 "feature[0].raw is a OpenLayers.Feature.Vector");
+            t.ok(store.getAt(1).raw instanceof OpenLayers.Feature.Vector,
+                 "feature[1].raw is a OpenLayers.Feature.Vector");
         }
 
         function test_constructor_features(t) {
