@@ -76,7 +76,7 @@ Ext.define('GeoExt.data.FeatureStore', {
                 type: 'memory',
                 reader: {
                     type: 'feature',
-                    idProperty: 'fid'
+                    idProperty: 'id'
                 }
             }
         }, config);
