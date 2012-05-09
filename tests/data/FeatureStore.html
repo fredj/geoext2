@@ -89,7 +89,7 @@
         function test_store_layer_sync(t) {
             t.plan(6);
 
-            var layer =  new OpenLayers.Layer.Vector();
+            var layer = new OpenLayers.Layer.Vector();
             var store = Ext.create('GeoExt.data.FeatureStore', {
                 model: 'My.Test.Model',
                 layer: layer
@@ -125,7 +125,7 @@
         function test_add_remove(t) {
             t.plan(4);
 
-            var layer =  new OpenLayers.Layer.Vector();
+            var layer = new OpenLayers.Layer.Vector();
             var store = Ext.create('GeoExt.data.FeatureStore', {
                 model: 'My.Test.Model',
                 layer: layer
@@ -147,7 +147,7 @@
 
         function test_getByFeature(t) {
             t.plan(2);
-            var layer =  new OpenLayers.Layer.Vector();
+            var layer = new OpenLayers.Layer.Vector();
             var features = [
                 new OpenLayers.Feature.Vector(),
                 new OpenLayers.Feature.Vector()
@@ -160,15 +160,16 @@
             });
 
             var feature = store.getByFeature(features[0]);
-	    t.ok(feature);
+            t.ok(feature);
 
             var feature = store.getByFeature(features[1]);
-	    t.ok(feature);
+            t.ok(feature);
         }
 
         function test_addFeatures_removeFeatures(t) {
-            t.plan(2);
-            var layer =  new OpenLayers.Layer.Vector();
+            t.plan(5);
+
+            var layer = new OpenLayers.Layer.Vector();
             var features = [
                 new OpenLayers.Feature.Vector(),
                 new OpenLayers.Feature.Vector()
@@ -204,7 +205,7 @@
 
         function test_destroy(t) {
             t.plan(1);
-            var layer =  new OpenLayers.Layer.Vector();
+            var layer = new OpenLayers.Layer.Vector();
             var store = Ext.create('GeoExt.data.FeatureStore', {
                 model: 'My.Test.Model',
                 layer: layer
