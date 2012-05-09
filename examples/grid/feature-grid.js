@@ -45,6 +45,7 @@ Ext.application({
             }
         };
         var template = {
+            cursor: "pointer",
             fillOpacity: 0.5,
             fillColor: "${getColor}",
             pointRadius: 5,
@@ -126,9 +127,10 @@ Ext.application({
             title: "Feature Grid",
             region: "east",
             store: store,
-            width: 320,
+            width: 340,
             columns: [{
-                header: "",
+                menuDisabled: true,
+                sortable: false,
                 width: 30,
                 renderer: renderFeature,
                 dataIndex: 'fid'
