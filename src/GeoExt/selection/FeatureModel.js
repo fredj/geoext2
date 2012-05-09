@@ -280,7 +280,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
         this.callParent(arguments);
 
         var feature = record.raw;
-        if (!this._selecting && feature) {
+        if (this.selectControl && !this._selecting && feature) {
             var layers = this.getLayers();
             if (isSelected) {
                 for (var i = 0, len = layers.length; i < len; i++) {

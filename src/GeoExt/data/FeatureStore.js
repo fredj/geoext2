@@ -129,11 +129,12 @@ Ext.define('GeoExt.data.FeatureStore', {
 
         if (initDir & GeoExt.data.FeatureStore.STORE_TO_LAYER) {
             this.each(function(record) {
-                this.layer.addFeatures([record.raw]);
+                layer.addFeatures([record.raw]);
             }, this);
         }
 
-        if (initDir & GeoExt.data.FeatureStore.LAYER_TO_STORE) {
+        if (initDir & GeoExt.data.FeatureStore.LAYER_TO_STORE &&
+                layer.features.length > 0) {
             // append a snapshot of the layer's features
             this.loadRawData(layer.features.slice(0), true);
         }
