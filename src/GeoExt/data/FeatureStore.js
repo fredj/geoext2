@@ -259,6 +259,11 @@ Ext.define('GeoExt.data.FeatureStore', {
      */
     onLoad: function(store, records, successful) {
         if (successful) {
+            // FIXME
+            this._removing = true;
+            this.layer.removeAllFeatures();
+            delete this._removing;
+
             this.addFeaturesToLayer(records);
         }
     },
